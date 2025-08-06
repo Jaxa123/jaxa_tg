@@ -1,20 +1,26 @@
 import logging
-from aiogram import Bot, Dispatcher, executor, types
+import asyncio
+from aiogram import Bot, Dispatcher
 
-API_TOKEN = '8181220707:AAHt03llUwCNthyHDqbAwFz3X7oagdHagDM'
+# Импорт всех роутеров
+from handlers.start import router as start_router
+from handlers.menu import router as menu_router
+from handlers.admin import router as admin_router
 
-# Включаем логирование
+API_TOKEN = "8181220707:AAHt03llUwCNthyHDqbAwFz3X7oagdHagDM"
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Инициализация бота и диспетчера
-bot = Bot(token=API_TOKEN)
-dp = Dispatcher(bot)
+async def main():
+    bot = Bot(token=API_TOKEN)
+    dp = Dispatcher()
+    # Подключаем все роутеры
+    dp.include_router(start_router)
+    dp.include_router(menu_router)
+    dp.include_router(admin_router)
+    await dp.start_polling(bot)
 
-@dp.message_handler(commands=['start', 'help'])
-async def send_welcome(message: types.Message):
-    await message.reply("Привет! Я ресторанный бот.")
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     logger.info("🚀 Запуск ресторанного бота...")
-    executor.start_polling(dp, skip_updates=True)
+    asyncio.run(main())
