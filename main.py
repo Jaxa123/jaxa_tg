@@ -1,13 +1,17 @@
 import logging
 import asyncio
+import os
 from aiogram import Bot, Dispatcher
+from dotenv import load_dotenv
 
 # Импорт всех роутеров
 from handlers.start import router as start_router
 from handlers.menu import router as menu_router
 from handlers.admin import router as admin_router
 
-API_TOKEN = "8181220707:AAHt03llUwCNthyHDqbAwFz3X7oagdHagDM"
+# Загружаем переменные окружения из .env
+load_dotenv()
+API_TOKEN = os.getenv("BOT_TOKEN")
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
